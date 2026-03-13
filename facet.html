@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facet — Vector-Based Job Search Platform</title>
+<meta name="description" content="Same diamond. Different face. Targeted resumes, pipeline tracking, interview prep, cover letters, and AI-powered research — one platform that learns what works.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 42'><defs><clipPath id='u'><path d='M0 0H34V42L0 21Z'/></clipPath><clipPath id='l'><path d='M0 21L34 42V42H0Z'/></clipPath></defs><g clip-path='url(%23u)'><path d='M4 2H28V10H13V18H24V26H13V40H4Z' fill='%236cb8e8'/></g><g clip-path='url(%23l)'><path d='M4 2H28V10H13V18H24V26H13V40H4Z' fill='%232d6a96'/></g></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200..700&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300..700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--bg-raised:#12151c;--border:#252a36;--border-hover:#333a4a;--text:#e8ecf2;--text-secondary:#9aa8b8;--muted:#6b7a8d;--accent:#5ba4d9;--accent-light:#6cb8e8;--accent-dark:#2d6a96;--accent-glow:#7ac4f0;--green:#4eca6a;--amber:#e5a820}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--border) var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.mono{font-family:'DM Mono',monospace}
+.cut-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.cut-bg::before{content:'';position:absolute;top:0;right:-10%;width:55%;height:100%;background:linear-gradient(215deg,rgba(91,164,217,.03) 0%,transparent 60%);transform:skewX(-8deg)}
+.grid-overlay{position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:80px 80px;opacity:.06;pointer-events:none;z-index:0}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.08s}.rd2{transition-delay:.16s}.rd3{transition-delay:.24s}.rd4{transition-delay:.32s}.rd5{transition-delay:.4s}
+.container{max-width:1000px;margin:0 auto;padding:0 40px;position:relative;z-index:1}
+section{padding:100px 0}
+.section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:40px}
+.hero{min-height:100vh;display:flex;align-items:center;position:relative}
+.hero-cut{position:absolute;top:0;right:0;width:45%;height:100%;background:linear-gradient(215deg,rgba(91,164,217,.04) 0%,transparent 70%);clip-path:polygon(30% 0,100% 0,100% 100%,0% 100%);pointer-events:none}
+.hero-cut::after{content:'';position:absolute;top:0;left:30%;width:1px;height:100%;background:linear-gradient(180deg,transparent,rgba(108,184,232,.08),rgba(108,184,232,.12),rgba(108,184,232,.08),transparent)}
+.hero-ghost{position:absolute;right:8%;top:50%;transform:translateY(-50%);opacity:.025;pointer-events:none}
+.hero-content{max-width:560px}
+.hero-lockup{display:flex;align-items:center;gap:3px;margin-bottom:28px}
+.hero-lockup .wm{font-family:'Outfit',sans-serif;font-weight:300;font-size:52px;color:var(--text);letter-spacing:-.5px;line-height:1}
+.hero-tag{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:32px}
+.hero-desc{font-size:17px;color:var(--text-secondary);line-height:1.75;margin-bottom:40px;max-width:480px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:4px;font-family:'DM Mono',monospace;font-size:13px;text-decoration:none;transition:all .3s;border:1px solid transparent}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-p:hover{background:var(--accent-light);border-color:var(--accent-light)}
+.btn-s{background:var(--bg-raised);color:var(--text);border-color:var(--border)}.btn-s:hover{border-color:var(--border-hover);background:#181c26}
+.btn .ar{opacity:.5;transition:opacity .3s,transform .3s}.btn:hover .ar{opacity:1;transform:translateX(2px)}
+.loop-section{border-top:1px solid var(--border)}
+.loop-track{display:flex;gap:0;align-items:stretch}
+.loop-step{flex:1;padding:28px 20px;background:var(--bg-raised);position:relative;text-align:center}
+.loop-step:first-child{border-radius:8px 0 0 8px}.loop-step:last-child{border-radius:0 8px 8px 0}
+.loop-step+.loop-step{border-left:1px solid var(--border)}
+.loop-step+.loop-step::before{content:'→';position:absolute;left:-7px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--accent);opacity:.35;background:var(--bg-raised);padding:2px 0;z-index:2}
+.loop-num{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--accent);opacity:.25;margin-bottom:8px}
+.loop-step h3{font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
+.loop-step p{font-size:11px;color:var(--muted);line-height:1.5}
+.loop-fb{text-align:center;margin-top:16px;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);opacity:.4}
+.ws-section{border-top:1px solid var(--border)}
+.ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ws-card{background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;padding:24px;transition:border-color .3s}
+.ws-card:hover{border-color:var(--border-hover)}
+.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-bottom:10px}
+.b-core{color:var(--accent);background:rgba(91,164,217,.1)}.b-ai{color:var(--amber);background:rgba(229,168,32,.1)}
+.ws-card h3{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px}
+.ws-card p{font-size:12.5px;color:var(--muted);line-height:1.6}
+.terminal{background:var(--bg-raised);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-top:48px}
+.t-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.dot{width:8px;height:8px;border-radius:50%}
+.t-title{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-left:8px}
+.t-body{padding:20px 22px;font-family:'DM Mono',monospace;font-size:12px;line-height:2}
+.pricing-section{border-top:1px solid var(--border)}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.pricing-card{background:var(--bg-raised);padding:32px 28px}
+.pricing-card:first-child{border-radius:8px 0 0 8px}.pricing-card:last-child{border-radius:0 8px 8px 0}
+.pricing-card h3{font-family:'Outfit',sans-serif;font-size:20px;font-weight:500;color:var(--text);margin-bottom:4px}
+.pricing-price{font-family:'DM Mono',monospace;font-size:13px;margin-bottom:16px}
+.pricing-card ul{list-style:none;padding:0}
+.pricing-card li{font-size:13px;color:var(--muted);padding:4px 0;display:flex;align-items:baseline;gap:8px}
+.pricing-card li::before{content:'✓';color:var(--accent);font-size:12px;flex-shrink:0}
+.tech-section{border-top:1px solid var(--border)}
+.tech-tags{display:flex;gap:10px;flex-wrap:wrap}
+.tech-tag{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);background:var(--bg-raised);border:1px solid var(--border);padding:6px 14px;border-radius:3px}
+.cta-section{border-top:1px solid var(--border);text-align:center}
+.cta-section h2{font-family:'Outfit',sans-serif;font-size:32px;font-weight:500;letter-spacing:-.5px;margin-bottom:12px}
+.cta-section p{color:var(--text-secondary);max-width:440px;margin:0 auto 32px}
+footer{padding:40px 0;border-top:1px solid var(--border)}
+.f-inner{display:flex;justify-content:space-between;align-items:center}
+.f-text{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.f-links{display:flex;gap:20px}
+.f-links a{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-decoration:none;transition:color .3s}
+.f-links a:hover{color:var(--text)}
+.bracket{position:fixed;pointer-events:none;z-index:0}.bracket svg{stroke:var(--accent);opacity:.08}
+.bracket-tl{top:24px;left:24px}.bracket-br{bottom:24px;right:24px}
+@media(max-width:768px){
+.container{padding:0 24px}section{padding:64px 0}
+.hero{min-height:auto;padding:100px 0 60px}.hero-cut,.hero-ghost{display:none}.hero-lockup .wm{font-size:38px}
+.ws-grid{grid-template-columns:1fr}
+.loop-track{flex-direction:column}.loop-step{border-radius:0!important}.loop-step:first-child{border-radius:8px 8px 0 0!important}.loop-step:last-child{border-radius:0 0 8px 8px!important}.loop-step+.loop-step{border-left:none;border-top:1px solid var(--border)}.loop-step+.loop-step::before{display:none}
+.pricing-grid{grid-template-columns:1fr}.pricing-card{border-radius:0!important}.pricing-card:first-child{border-radius:8px 8px 0 0!important}.pricing-card:last-child{border-radius:0 0 8px 8px!important}
+.f-inner{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+<div class="grid-overlay"></div>
+<div class="cut-bg"></div>
+<div class="bracket bracket-tl"><svg width="40" height="40" fill="none"><polyline points="2,16 2,2 16,2" stroke-width="1.5"/></svg></div>
+<div class="bracket bracket-br"><svg width="40" height="40" fill="none"><polyline points="24,38 38,38 38,24" stroke-width="1.5"/></svg></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-cut"></div>
+  <div class="hero-ghost">
+    <svg viewBox="0 0 22 32" width="320" height="460" fill="none">
+      <path d="M6 2 H16 L20 9 H2 Z" fill="#5ba4d9"/>
+      <path d="M2 9 L11 31 L11 9 Z" fill="#1e5a82"/>
+      <path d="M20 9 L11 31 L11 9 Z" fill="#3d88b8"/>
+    </svg>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-lockup reveal">
+        <svg width="44" height="55" viewBox="0 0 34 42" fill="none">
+          <defs><clipPath id="hu"><path d="M0 0 H34 V42 L0 21 Z"/></clipPath><clipPath id="hl"><path d="M0 21 L34 42 V42 H0 Z"/></clipPath></defs>
+          <g clip-path="url(#hu)"><path d="M4 2 H28 V10 H13 V18 H24 V26 H13 V40 H4 Z" fill="#6cb8e8"/></g>
+          <g clip-path="url(#hl)"><path d="M4 2 H28 V10 H13 V18 H24 V26 H13 V40 H4 Z" fill="#2d6a96"/></g>
+          <line x1="0" y1="21" x2="34" y2="42" stroke="#7ac4f0" stroke-width="0.5" opacity="0.4"/>
+        </svg>
+        <span class="wm">acet</span>
+      </div>
+      <div class="hero-tag reveal rd1">Same diamond · Different face</div>
+      <p class="hero-desc reveal rd2">
+        A complete job search platform built on one idea: maintain a single source of truth
+        about your experience, then show the right facet at every touchpoint — resume, cover letter,
+        interview, outreach. The system learns what works and feeds it back.
+      </p>
+      <div class="hero-actions reveal rd3">
+        <a href="https://github.com/NickCrew/Facet" class="btn btn-p">View on GitHub <span class="ar">→</span></a>
+        <a href="#workspaces" class="btn btn-s">See Workspaces</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE LOOP -->
+<section class="loop-section">
+  <div class="container">
+    <div class="section-label reveal">The Loop</div>
+    <div class="loop-track reveal rd1">
+      <div class="loop-step"><div class="loop-num">01</div><h3>Research</h3><p>AI infers your search profile, finds matching roles, triages results</p></div>
+      <div class="loop-step"><div class="loop-num">02</div><h3>Pipeline</h3><p>Track every opportunity through status, tier, comp, notes, JD</p></div>
+      <div class="loop-step"><div class="loop-num">03</div><h3>Build</h3><p>Generate a targeted resume tuned to the specific role and vector</p></div>
+      <div class="loop-step"><div class="loop-num">04</div><h3>Letters</h3><p>Draft a cover letter from pipeline context and resume data</p></div>
+      <div class="loop-step"><div class="loop-num">05</div><h3>Prep</h3><p>Generate interview decks, practice, go in ready</p></div>
+    </div>
+    <div class="loop-fb reveal rd2">← Results feed back into Research to improve targeting →</div>
+  </div>
+</section>
+
+<!-- WORKSPACES -->
+<section class="ws-section" id="workspaces">
+  <div class="container">
+    <div class="section-label reveal">Workspaces</div>
+    <div class="ws-grid">
+      <div class="ws-card reveal rd1">
+        <div class="badge b-core">Core</div>
+        <h3>Build</h3>
+        <p>The resume engine. Vector-based targeting with per-bullet include/exclude controls, skill group routing, Typst WASM PDF rendering with WYSIWYG preview. 8 theme presets with full token-level overrides. Density controls, presets with dirty-state tracking, and round-trippable JSON import/export.</p>
+      </div>
+      <div class="ws-card reveal rd2">
+        <div class="badge b-core">Core</div>
+        <h3>Pipeline</h3>
+        <p>Full job tracking. Company, role, URL, compensation, status, notes, JD storage, vector linkage, and activity history. Filter by tier, status, and search. Built-in analytics. Hands off directly into Build analysis and Prep generation.</p>
+      </div>
+      <div class="ws-card reveal rd3">
+        <div class="badge b-ai">AI</div>
+        <h3>Research</h3>
+        <p>Infers a search profile from your resume data. Runs targeted searches with vector priorities, filters, and exclusions. Automatically skips companies you've rejected. Push results straight into Pipeline.</p>
+      </div>
+      <div class="ws-card reveal rd4">
+        <div class="badge b-ai">AI</div>
+        <h3>Prep</h3>
+        <p>Interview prep decks linked to pipeline entries. AI generates cards from the JD, your resume, and company research. Search, filter, duplicate, edit. Practice mode for rehearsal.</p>
+      </div>
+      <div class="ws-card reveal rd5">
+        <div class="badge b-ai">AI</div>
+        <h3>Letters</h3>
+        <p>Template-based cover letters with paragraph-level vector controls. AI drafts from pipeline context — opportunity, vector, company research, and assembled resume data. Reusable templates persist across sessions.</p>
+      </div>
+      <div class="ws-card reveal rd5">
+        <div class="badge b-core">Core</div>
+        <h3>Persistence &amp; Backup</h3>
+        <p>Encrypted workspace backups with passphrase-based WebCrypto. File System Access for native save/load. Sync status in the shell, backup reminders when local changes outpace saved state. Tenant-aware — ready for hosted backends.</p>
+      </div>
+    </div>
+
+    <div class="terminal reveal">
+      <div class="t-bar">
+        <div class="dot" style="background:#ff5f56"></div>
+        <div class="dot" style="background:#ffbd2e"></div>
+        <div class="dot" style="background:#27c93f"></div>
+        <span class="t-title">facet — full loop</span>
+      </div>
+      <div class="t-body">
+        <div style="color:var(--muted)">// Research found 12 matches, 3 pushed to Pipeline</div>
+        <div><span style="color:var(--accent-light)">pipeline</span><span style="color:var(--muted)">:</span> Acme Corp · Senior Platform Engineer · $185-210k</div>
+        <div><span style="color:var(--accent-light)">vector </span><span style="color:var(--muted)">:</span> platform-engineer <span style="color:var(--muted)">(38/64 bullets active)</span></div>
+        <div><span style="color:var(--accent-light)">theme  </span><span style="color:var(--muted)">:</span> ferguson-v12 <span style="color:var(--muted)">@ density 0</span></div>
+        <div style="margin-top:8px"><span style="color:var(--green)">✓</span> PDF rendered — 1.0 pages (98.4% fill)</div>
+        <div><span style="color:var(--green)">✓</span> JD analysis: 4 reframe suggestions applied</div>
+        <div><span style="color:var(--green)">✓</span> Cover letter generated from pipeline + resume context</div>
+        <div><span style="color:var(--green)">✓</span> Prep deck: 24 cards (behavioral, technical, company-specific)</div>
+        <div style="margin-top:8px;color:var(--muted)">// Interview complete → result logged → targeting adjusted</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <div class="container">
+    <div class="section-label reveal">Pricing</div>
+    <div class="pricing-grid reveal rd1">
+      <div class="pricing-card">
+        <h3>Free</h3>
+        <div class="pricing-price" style="color:var(--accent)">$0 · forever</div>
+        <ul>
+          <li>Resume build workspace with vectors, themes, and PDF export</li>
+          <li>Pipeline tracking with filters, sorting, and analytics</li>
+          <li>Manual interview prep decks and cover letter templates</li>
+          <li>Encrypted local backups with File System Access</li>
+          <li>JSON import/export for all data</li>
+        </ul>
+      </div>
+      <div class="pricing-card">
+        <h3>AI-Powered</h3>
+        <div class="pricing-price" style="color:var(--amber)">Coming soon</div>
+        <ul>
+          <li>Everything in Free</li>
+          <li>JD analysis with AI-assisted bullet reframing</li>
+          <li>Research profile inference and targeted job search</li>
+          <li>AI-generated interview prep decks from pipeline context</li>
+          <li>AI cover letter drafts from resume + opportunity data</li>
+          <li>Feedback loop: results improve future targeting</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top: 20px;font-style: italic;" class="reveal rd2">AI-Powered features available NOW for <strong>Self-Hosted</strong> + <strong>BYOK</strong> (multiple providers supported).</p>
+
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="reveal">
+      <svg viewBox="0 0 22 32" width="32" height="46" fill="none" style="margin-bottom:20px;opacity:.6">
+        <path d="M6 2 H16 L20 9 H2 Z" fill="#5ba4d9"/><path d="M8 3.5 H14 L16.5 8 H5.5 Z" fill="#6cb8e8" opacity="0.25"/>
+        <path d="M2 9 L11 31 L11 9 Z" fill="#1e5a82"/><path d="M20 9 L11 31 L11 9 Z" fill="#3d88b8"/>
+        <line x1="1.5" y1="9" x2="20.5" y2="9" stroke="#6cb8e8" stroke-width="0.5" opacity="0.5"/>
+        <line x1="11" y1="2" x2="11" y2="31" stroke="#6cb8e8" stroke-width="0.35" opacity="0.25"/>
+      </svg>
+    </div>
+    <h2 class="reveal rd1">Stop managing files. Start running a process.</h2>
+    <p class="reveal rd2">One platform. Every touchpoint. The system learns what works.</p>
+    <div class="reveal rd3" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="https://nickcrew.github.io/facet" class="btn btn-p">Try It <span class="ar">→</span></a>
+      <a href="https://github.com/NickCrew/Facet" class="btn btn-s">Github</a>
+    </div>
+  </div>
+</section>
+
+<!-- TECH -->
+<section class="tech-section">
+  <div class="container">
+    <div class="section-label reveal">Built with</div>
+    <div class="tech-tags reveal rd1">
+      <span class="tech-tag">React 19</span>
+      <span class="tech-tag">TypeScript</span>
+      <span class="tech-tag">Zustand</span>
+      <span class="tech-tag">Vite</span>
+      <span class="tech-tag">TanStack Router</span>
+      <span class="tech-tag">Typst WASM</span>
+      <span class="tech-tag">WebCrypto</span>
+      <span class="tech-tag">DM Sans + Outfit</span>
+    </div>
+    <div style="margin-top:24px" class="reveal rd2">
+      <span class="mono" style="font-size:11px;color:var(--muted);letter-spacing:1px">OPEN SOURCE · AGPL LICENSED</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="f-inner">
+      <div class="f-text">
+        <svg width="12" height="15" viewBox="0 0 34 42" fill="none">
+          <defs><clipPath id="fu"><path d="M0 0 H34 V42 L0 21 Z"/></clipPath><clipPath id="fl"><path d="M0 21 L34 42 V42 H0 Z"/></clipPath></defs>
+          <g clip-path="url(#fu)"><path d="M4 2 H28 V10 H13 V18 H24 V26 H13 V40 H4 Z" fill="#6cb8e8"/></g>
+          <g clip-path="url(#fl)"><path d="M4 2 H28 V10 H13 V18 H24 V26 H13 V40 H4 Z" fill="#2d6a96"/></g>
+        </svg>
+        Facet · Same diamond. Different face.
+      </div>
+      <div class="f-links">
+        <a href="job-search.html">Methodology</a>
+        <a href="nickcrew.github.io/facet">Live App</a>
+        <a href="https://github.com/NickCrew/Facet">Source Code</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const o=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>o.observe(el));
+});
+</script>
+</body>
+</html>

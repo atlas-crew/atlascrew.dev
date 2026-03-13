@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nicholas Crew Ferguson — atlascrew.dev</title>
+<meta name="description" content="Platform engineering, security tooling, and AI-augmented development. Open source projects and consulting.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M30 12c-14 3-20 10-20 20s6 17 20 20' fill='none' stroke='%23c4a882' stroke-width='2.5' stroke-linecap='round'/><path d='M22 52L35 12h3l13 40h-5l-2.5-8H29.5L27 52h-5z' fill='%23c8cdd6'/><path d='M31 38h11' stroke='%230b0d11' stroke-width='2.8'/><path d='M36.5 18l-4 14h8l-4-14z' fill='%230b0d11'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0d11;
+    --bg-raised: #111419;
+    --bg-hover: #161a20;
+    --border: #1e2230;
+    --border-hover: #2a3040;
+    --text: #d8dce4;
+    --text-bright: #eef0f4;
+    --text-secondary: #919aaa;
+    --muted: #5c6678;
+    --warm: #c4a882;
+    --orange: #f06030;
+    --orange-light: #f48040;
+    --blue-facet: #6cb8e8;
+    --blue-facet-dark: #2d6a96;
+    --purple: #a478e8;
+    --purple-light: #b98ef0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* Noise texture */
+  .noise {
+    position: fixed; inset: 0; opacity: 0.025; pointer-events: none; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .rd1 { transition-delay: 0.08s; }
+  .rd2 { transition-delay: 0.16s; }
+  .rd3 { transition-delay: 0.24s; }
+  .rd4 { transition-delay: 0.32s; }
+
+  /* Layout */
+  .container { max-width: 880px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 1; }
+
+  /* Nav */
+  .nav {
+    padding: 24px 0;
+    position: relative;
+    z-index: 10;
+  }
+  .nav-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .nav-brand span { font-weight: 600; font-size: 14px; letter-spacing: 0.3px; }
+  .nav-links { display: flex; gap: 20px; }
+  .nav-links a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    padding: 80px 0 60px;
+  }
+  .hero-name {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .hero-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    max-width: 520px;
+    margin-bottom: 24px;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .hero-meta a, .hero-meta span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .hero-meta a:hover { color: var(--text); }
+
+  /* Divider */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  /* Projects grid */
+  .projects { padding: 64px 0 80px; }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .project-card {
+    background: var(--bg-raised);
+    padding: 32px 28px;
+    position: relative;
+    transition: background 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+  }
+  .project-card:hover { background: var(--bg-hover); }
+  .project-card:nth-child(1) { border-radius: 10px 0 0 0; }
+  .project-card:nth-child(2) { border-radius: 0 10px 0 0; }
+  .project-card:nth-child(3) { border-radius: 0 0 0 10px; }
+  .project-card:nth-child(4) { border-radius: 0 0 10px 0; }
+
+  .project-card .card-icon {
+    margin-bottom: 20px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+  }
+
+  .project-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
+  }
+
+  .project-card .card-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .project-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .project-card .card-footer {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+  }
+
+  .project-card .card-stat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+  }
+  .card-stat .val { font-weight: 500; }
+  .card-stat .lbl { color: var(--muted); margin-left: 3px; }
+
+  .card-arrow {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 14px;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .project-card:hover .card-arrow {
+    opacity: 0.6;
+    transform: translateX(2px);
+  }
+
+  /* Footer */
+  footer { padding: 40px 0; border-top: 1px solid var(--border); }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--text); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .container, .nav-inner { padding: 0 24px; }
+    .project-grid { grid-template-columns: 1fr; }
+    .project-card { border-radius: 0 !important; }
+    .project-card:first-child { border-radius: 10px 10px 0 0 !important; }
+    .project-card:last-child { border-radius: 0 0 10px 10px !important; }
+    .nav-links { display: none; }
+    .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+    .hero { padding: 48px 0 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <svg width="22" height="22" viewBox="0 0 64 64" fill="none">
+        <path d="M30 12c-14 3-20 10-20 20s6 17 20 20" fill="none" stroke="var(--warm)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M22 52L35 12h3l13 40h-5l-2.5-8H29.5L27 52h-5z" fill="var(--text)" opacity="0.9"/>
+        <path d="M31 38h11" stroke="var(--bg)" stroke-width="2.8"/>
+        <path d="M36.5 18l-4 14h8l-4-14z" fill="var(--bg)"/>
+      </svg>
+      <span>Atlas Crew</span>
+    </a>
+    <div class="nav-links">
+      <a href="https://github.com/NickCrew">GitHub</a>
+      <a href="https://linkedin.com/in/ncferguson">LinkedIn</a>
+      <a href="https://nickcrew.github.io/resume">About</a>
+      <a href="mailto:nick@atlascrew.dev">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1 class="hero-name reveal">Nicholas Crew Ferguson</h1>
+    <p class="hero-desc reveal rd1">
+      Platform engineer and security tooling builder. I design production infrastructure,
+      build open-source security platforms, and ship AI-augmented development tools — usually solo.
+    </p>
+    <div class="hero-meta reveal rd2">
+      <span>Tampa Bay, FL</span>
+      <a href="mailto:nick@atlascrew.dev">nick@atlascrew.dev</a>
+      <a style="font-weight: 600" href="https://nickcrew.github.io/resume">Resume →</a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Projects -->
+<section class="projects">
+  <div class="container">
+    <div class="section-label reveal">Projects</div>
+
+    <div class="project-grid">
+
+      <!-- Inferno Lab -->
+      <a href="inferno.html" class="project-card reveal rd1">
+        <span class="card-arrow">→</span>
+        <div class="card-icon">
+          <!-- F9: Shared root flame -->
+          <svg width="40" height="40" viewBox="0 0 110 110" fill="none">
+            <path d="M55,86 Q64,66 55,48 Q46,30 55,16" fill="none" stroke="#f06030" stroke-width="4" stroke-linecap="round"/>
+            <path d="M55,86 Q44,68 36,52 Q28,36 34,24" fill="none" stroke="#f48040" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+            <path d="M55,86 Q66,68 74,52 Q82,36 76,24" fill="none" stroke="#f48040" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+            <circle cx="55" cy="88" r="3" fill="#f06030" opacity="0.3"/>
+          </svg>
+        </div>
+        <h2>Inferno Lab</h2>
+        <div class="card-type" style="color:var(--orange);">Security Platform</div>
+        <p>
+          Testing, simulation, and security education platform.
+          Apparatus simulates the environment, Chimera teaches you to break it,
+          Crucible validates at enterprise scale.
+        </p>
+        <div class="card-footer">
+          <span class="card-stat"><span class="val" style="color:var(--orange)">3</span><span class="lbl">tools</span></span>
+          <span class="card-stat"><span class="val" style="color:var(--orange)">58+</span><span class="lbl">features</span></span>
+          <span class="card-stat"><span class="val" style="color:var(--orange)">AGPL</span><span class="lbl"></span></span>
+        </div>
+      </a>
+
+      <!-- Cortex -->
+      <a href="https://github.com/NickCrew/claude-cortex" class="project-card reveal rd2">
+        <span class="card-arrow">→</span>
+        <div class="card-icon">
+          <!-- Interconnected nodes -->
+          <svg width="40" height="40" viewBox="0 0 110 110" fill="none">
+            <!-- Central node -->
+            <circle cx="55" cy="55" r="8" fill="none" stroke="#a478e8" stroke-width="2.5"/>
+            <circle cx="55" cy="55" r="3" fill="#a478e8" opacity="0.5"/>
+            <!-- Outer nodes -->
+            <circle cx="28" cy="28" r="5" fill="none" stroke="#b98ef0" stroke-width="2" opacity="0.6"/>
+            <circle cx="82" cy="28" r="5" fill="none" stroke="#b98ef0" stroke-width="2" opacity="0.6"/>
+            <circle cx="28" cy="82" r="5" fill="none" stroke="#b98ef0" stroke-width="2" opacity="0.6"/>
+            <circle cx="82" cy="82" r="5" fill="none" stroke="#b98ef0" stroke-width="2" opacity="0.6"/>
+            <!-- Connection lines -->
+            <line x1="35" y1="34" x2="48" y2="48" stroke="#a478e8" stroke-width="1.5" opacity="0.35"/>
+            <line x1="75" y1="34" x2="62" y2="48" stroke="#a478e8" stroke-width="1.5" opacity="0.35"/>
+            <line x1="35" y1="76" x2="48" y2="62" stroke="#a478e8" stroke-width="1.5" opacity="0.35"/>
+            <line x1="75" y1="76" x2="62" y2="62" stroke="#a478e8" stroke-width="1.5" opacity="0.35"/>
+            <!-- Cross connections -->
+            <line x1="33" y1="28" x2="77" y2="28" stroke="#b98ef0" stroke-width="1" opacity="0.15"/>
+            <line x1="28" y1="33" x2="28" y2="77" stroke="#b98ef0" stroke-width="1" opacity="0.15"/>
+          </svg>
+        </div>
+        <h2>Cortex</h2>
+        <div class="card-type" style="color:var(--purple);">AI Dev Framework</div>
+        <p>
+          Context orchestration for Claude Code, Codex, and Gemini. 90+ skills,
+          intelligent recommendation engine, multi-agent coordination, memory vault,
+          and a Python CLI that watches your project and activates what you need.
+        </p>
+        <div class="card-footer">
+          <span class="card-stat"><span class="val" style="color:var(--purple)">90+</span><span class="lbl">skills</span></span>
+          <span class="card-stat"><span class="val" style="color:var(--purple)">3</span><span class="lbl">LLMs</span></span>
+          <span class="card-stat"><span class="val" style="color:var(--purple)">PyPI</span><span class="lbl"></span></span>
+        </div>
+      </a>
+
+      <!-- Facet -->
+      <a href="facet.html" class="project-card reveal rd3">
+        <span class="card-arrow">→</span>
+        <div class="card-icon">
+          <!-- Facet F-mark -->
+          <svg width="30" height="38" viewBox="0 0 34 42" fill="none">
+            <defs>
+              <clipPath id="fu"><path d="M0 0 H34 V42 L0 21 Z"/></clipPath>
+              <clipPath id="fl"><path d="M0 21 L34 42 V42 H0 Z"/></clipPath>
+            </defs>
+            <g clip-path="url(#fu)"><path d="M4 2 H28 V10 H13 V18 H24 V26 H13 V40 H4 Z" fill="#6cb8e8"/></g>
+            <g clip-path="url(#fl)"><path d="M4 2 H28 V10 H13 V18 H24 V26 H13 V40 H4 Z" fill="#2d6a96"/></g>
+            <line x1="0" y1="21" x2="34" y2="42" stroke="#7ac4f0" stroke-width="0.5" opacity="0.4"/>
+          </svg>
+        </div>
+        <h2>Facet</h2>
+        <div class="card-type" style="color:var(--blue-facet);">Job Search Platform</div>
+        <p>
+          Vector-based job search suite. Targeted resume generation, pipeline tracking,
+          interview prep, cover letters, and a feedback loop that learns what works.
+          Same diamond, different face.
+        </p>
+        <div class="card-footer">
+          <span class="card-stat"><span class="val" style="color:var(--blue-facet)">Full</span><span class="lbl">pipeline</span></span>
+          <span class="card-stat"><span class="val" style="color:var(--blue-facet)">Typst</span><span class="lbl">PDF</span></span>
+          <span class="card-stat"><span class="val" style="color:var(--blue-facet)">AGPL</span><span class="lbl"></span></span>
+        </div>
+      </a>
+
+      <!-- Consulting -->
+      <a href="consulting.html" class="project-card reveal rd4">
+        <span class="card-arrow">→</span>
+        <div class="card-icon">
+          <!-- AC monogram R4 -->
+          <svg width="38" height="38" viewBox="0 0 64 64" fill="none">
+            <path d="M30 12c-14 3-20 10-20 20s6 17 20 20" fill="none" stroke="var(--warm)" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M22 52L35 12h3l13 40h-5l-2.5-8H29.5L27 52h-5z" fill="var(--text)" opacity="0.9"/>
+            <path d="M31 38h11" stroke="var(--bg-raised)" stroke-width="2.8"/>
+            <path d="M36.5 18l-4 14h8l-4-14z" fill="var(--bg-raised)"/>
+          </svg>
+        </div>
+        <h2>Consulting</h2>
+        <div class="card-type" style="color:var(--warm);">Atlas Crew</div>
+        <p>
+          Solo platform engineering and security consulting.
+          Production infrastructure, security tooling, and AI-augmented
+          workflows. Available for contract engagements.
+        </p>
+        <div class="card-footer">
+          <span class="card-stat"><span class="val" style="color:var(--warm)">4</span><span class="lbl">platforms shipped</span></span>
+          <span class="card-stat"><span class="val" style="color:var(--warm)">4,400×</span><span class="lbl">WAF perf</span></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-text">
+        <svg width="14" height="14" viewBox="0 0 64 64" fill="none">
+          <path d="M30 12c-14 3-20 10-20 20s6 17 20 20" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M22 52L35 12h3l13 40h-5l-2.5-8H29.5L27 52h-5z" fill="var(--muted)"/>
+          <path d="M31 38h11" stroke="var(--bg)" stroke-width="2.8"/>
+          <path d="M36.5 18l-4 14h8l-4-14z" fill="var(--bg)"/>
+        </svg>
+        atlascrew.dev · Tampa Bay
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/NickCrew">GitHub</a>
+        <a href="https://linkedin.com/in/ncferguson">LinkedIn</a>
+        <a href="https://nickcrew.github.io/resume">Resume</a>
+        <a href="mailto:nick@atlascrew.dev">Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>
