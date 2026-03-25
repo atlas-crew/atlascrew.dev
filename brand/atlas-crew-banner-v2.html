@@ -62,12 +62,31 @@
     color: #d8dce4;
   }
 
-  .tagline {
-    font-variation-settings: 'wght' 400, 'MONO' 1, 'CASL' 0, 'CRSV' 0.5, 'slnt' 0;
-    font-size: 15px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #5c6678;
+  .subtitle {
+    font-variation-settings: 'wght' 400, 'MONO' 0, 'CASL' 0.3, 'CRSV' 0.5, 'slnt' 0;
+    font-size: 17px;
+    color: #919aaa;
+    letter-spacing: 0.3px;
+    max-width: 560px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .services {
+    font-variation-settings: 'wght' 500, 'MONO' 0, 'CASL' 0.3, 'CRSV' 0.5, 'slnt' 7;
+    font-size: 14px;
+    color: #919aaa;
+    letter-spacing: 0.3px;
+    max-width: 560px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .horizon-lines {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
   }
 
   .domain {
@@ -96,6 +115,11 @@
 <div class="glow"></div>
 <div class="frame"></div>
 
+<svg class="horizon-lines" viewBox="0 0 1200 630" fill="none" preserveAspectRatio="none">
+  <line x1="0" y1="345" x2="1200" y2="345" stroke="#c4a882" stroke-width="0.5" opacity="0.07"/>
+  <line x1="0" y1="357" x2="1200" y2="357" stroke="#c4a882" stroke-width="0.5" opacity="0.035"/>
+</svg>
+
 <div class="content">
   <div class="mark-row">
     <svg width="72" height="72" viewBox="0 0 64 64" fill="none">
@@ -106,7 +130,11 @@
     </svg>
     <span class="wordmark">Atlas Crew</span>
   </div>
-  <div class="tagline">Product Engineering · Security · Developer Tools</div>
+  <div class="subtitle">End-to-end product engineering that ships. 
+    </div>
+    <div class="services">
+        New Product • Developer Platforms • AI Integration • Scalable Infrastructure
+      </div>
   <div class="domain">atlascrew.dev</div>
 </div>
 
