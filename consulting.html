@@ -91,7 +91,7 @@
 
   .section-label {
     font-variation-settings: 'wght' 600, 'MONO' 1, 'CASL' 0.3, 'CRSV' 0.5, 'slnt' -4;
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 2.5px;
     text-transform: uppercase;
     color: var(--muted);
@@ -148,8 +148,8 @@
   .nav-links { display: flex; gap: 24px; }
   .nav-links a {
     font-variation-settings: 'wght' 500, 'MONO' 1, 'CASL' 0, 'CRSV' 0.5, 'slnt' 0;
-    font-size: 12px;
-    color: var(--muted);
+    font-size: 14px;
+    color: var(--accent-warm);
     text-decoration: none;
     transition: color 0.3s;
     letter-spacing: 0.3px;
@@ -260,7 +260,7 @@
 
   .service-tag {
     font-variation-settings: 'wght' 500, 'MONO' 1, 'CASL' 0, 'CRSV' 0.5, 'slnt' 0;
-    font-size: 9px;
+    font-size: 12px;
     letter-spacing: 1px;
     text-transform: uppercase;
     color: var(--accent-warm);
@@ -355,6 +355,18 @@
   }
   .cap-col li:last-child { border-bottom: none; }
 
+  h3.capabilities-header{
+    font-size: 16px;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    opacity: 0.9;
+    margin-top: 15px;
+    margin-left: 20px;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    font-variation-settings: 'wght' 700, 'MONO' 0, 'CASL' 0.4, 'CRSV' 0.5, 'slnt' 0;
+  }
+
   /* ═══ CONTACT STRIP ═══ */
   .contact-section { text-align: center; }
 
@@ -365,6 +377,32 @@
     margin-bottom: 12px;
     letter-spacing: -0.3px;
   }
+
+  .capabilities {
+    /* margin-top: 60px; */
+    /* border-top: solid 0.5px #5c667866; */
+    /* border-bottom: solid 0.5px #5c667866; */
+    /* width: 500px; */
+    text-align: center;
+    margin-top: -80px;
+    margin-bottom: -80px;
+}
+  .container.capabilities-container {
+    width: 700px;
+}
+  p.capabilities-text {
+    margin-bottom: 10px;
+    font-style: italic;
+    color: var(--accent);
+    font-variation-settings: 'wght' 400, 'MONO' 0, 'CASL' 0.4, 'CRSV' 0.5;
+    margin-top: -5px;
+}
+
+  .section-links {
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--accent-warm);
+}
 
   .contact-section p {
     color: var(--text-secondary);
@@ -454,12 +492,13 @@
       </svg>
       <span>Atlas Crew</span>
     </a>
-    <div class="nav-links">
+    <div class="nav-links section-links">
+       <a href="#work">Work</a>
       <a href="#services">Services</a>
-      <a href="#work">Work</a>
+      <a href="#capabilities">Capabilities</a>
       <a href="#contact">Contact</a>
     </div>
-  </div>
+    </div>
 </nav>
 
 
@@ -468,7 +507,7 @@
      ═══════════════════════════════════════════════════ -->
 <section class="hero">
   <div class="container">
-    <div class="hero-intro reveal">Nicholas Crew Ferguson · Tampa Bay</div>
+    <div class="hero-intro reveal">Nicholas Crew Ferguson · Tampa Bay, FL</div>
 
     <h1 class="reveal rd1">
       I build the whole thing.
@@ -577,7 +616,11 @@
           Apparatus
         </div>
         <div class="project-type">Open source · Network simulation platform</div>
-        <p>AI-augmented network simulation across 13 protocols with full API and CLI. Fault injection, honeypots, exfil detection, and protocol-aware traffic generation.</p>
+        <p>
+        AI-powered security simulation lab. Autonomous agent explores targets,
+          generates attack chains, and validates defenses across realistic
+          infrastructure environments.
+            </p>
         <div class="proof-stats">
           <span class="ps-item"><span class="ps-val">13</span><span class="ps-lbl">protocols</span></span>
           <span class="ps-item"><span class="ps-val">22</span><span class="ps-lbl">verticals</span></span>
@@ -651,48 +694,90 @@
 <!-- ═══════════════════════════════════════════════════
      CAPABILITIES
      ═══════════════════════════════════════════════════ -->
-<section>
+<section id="capabilities">
   <div class="container">
-    <div class="section-label reveal">Capabilities</div>
+    <div class="section-label reveal visible">Capabilities</div>
 
-    <div class="cap-cols reveal rd1">
+    <div class="cap-cols reveal rd1 visible">
       <div class="cap-col">
-        <h3>Languages</h3>
+        <h3>Languages &amp; OS</h3>
         <ul>
-          <li>Rust</li>
-          <li>C# / .NET</li>
-          <li>TypeScript / Node</li>
-          <li>Python</li>
-          <li>Go</li>
+          <li>Python</li><li>C# / .NET</li><li>Rust</li>
+          
+          <li>TypeScript</li>
+          
+          <li>React</li>
+        <li>Go</li>
+    <li>SQL</li>
+    <li>AsciiDoc</li>
+    <li>PowerShell</li>
+    <li>Lua</li>
+<li>Linux, Win, macOS, iOS</li>
+    
+    
+    
+    
         </ul>
       </div>
       <div class="cap-col">
         <h3>Surfaces</h3>
         <ul>
-          <li>Web & Desktop Applications</li>
-          <li>UI/UX & Design Systems</li>
+          <li>Web &amp; Desktop Applications</li>
+          
           <li>Scalable Infrastructure</li>
-          <li>CI/CD & Automation</li>
-          <li>DevOps / SDLC Modernization</li>
-          <li>Branding & Identity</li>
-        </ul>
-      </div>
-      <div class="cap-col">
-        <h3>Your Domain, Built</h3>
-        <ul>
-          <li>You bring the expertise</li>
-          <li>I build the product</li>
-          <li>Architecture → deploy</li>
-          <li>Full surface ownership</li>
-          <li>Shipped, not prototyped</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+          <li>CI/CD &amp; Release Management</li>
+          <li>DevSecOps / SDLC Modernization</li>
+          
+      <li>Platform Development</li>
+          
+          
+          <li>Performance Optimization</li>
+          <li>AI Integration </li>     
+    
+     
 
+    
+  
+    <li>Information Architecture</li>
+         <li>Documentation Production</li><li>UI/UX &amp; Design Systems</li>
+          <li>Branding &amp; Identity</li>
+    </ul>
+      </div>
+      
+    <div class="cap-col">
+        <h3>Interests</h3>
+        <ul>
+          <li>API &amp; Web Security</li><li>Developer Experience</li>
+          
+    <li>Agentic AI</li>
+    <li>Technical Writing</li>
+    <li>Bare-metal Linux</li>
+    <li>TCP/IP Networks</li>
+    <li>Private Cloud</li>
+    <li>Deployment Engineering</li>
+    <li>Real-time Analytics</li>     
+    <li>Data Management</li>      
+          
+        </ul>
+      </div></div>
+      
+      </div>
+    
+</section>
 <hr class="divider">
 
+<section class="capabilities">
+    <div class="container capabilities-container">
+  <h3 class="capabilities-header">Your Domain, Built</h3>
+        <p class="capabilities-text">
+          You bring the domain expertise. I bring product architecture → deployment. 
+        </p>
+        <p class="capabilities-text">
+          Full surface ownership. Shipped, not prototyped.
+        </p>
+      </div>
+    </section>
+<hr class="divider">
 
 <!-- ═══════════════════════════════════════════════════
      CONTACT
@@ -725,14 +810,14 @@
             <line x1="8" y1="34" x2="56" y2="34" stroke="var(--muted)" stroke-width="1.2"/>
             <line x1="10" y1="40" x2="56" y2="40" stroke="var(--muted)" stroke-width="0.8" opacity="0.35"/>
           </svg>
-          Atlas Crew · Tampa Bay
+          Atlas Crew Consulting · Tampa Bay, FL
         </span>
       </div>
       <div class="footer-links">
-        <a href="index.html">Portfolio</a>
-        <a href="https://portfolio.atlascrew.dev/#projects">Case Studies</a>
+        <a href="index.html">Home</a>
         <a href="https://github.com/NickCrew">GitHub</a>
         <a href="https://linkedin.com/in/ncferguson">LinkedIn</a>
+        <a href="https://portfolio.atlascrew.dev/#projects">Deep-Dives</a>
       </div>
     </div>
   </div>
